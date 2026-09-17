@@ -205,5 +205,66 @@
         </div>
         
     </main>
+
+    
+   <script>
+function getFullHeight() {
+  const body = document.body;
+  const html = document.documentElement;
+
+  return Math.ceil(Math.max(
+    body.scrollHeight,
+    body.offsetHeight,
+    html.clientHeight,
+    html.scrollHeight,
+    html.offsetHeight
+  ));
+}
+
+function sendHeight() {
+  window.parent.postMessage(
+    {
+      type: "iframe-height",
+      height: getFullHeight()
+    },
+    "https://iiacss.org"
+  );
+}
+
+window.addEventListener("load", function () {
+  sendHeight();
+
+  setTimeout(sendHeight, 300);
+  setTimeout(sendHeight, 1000);
+  setTimeout(sendHeight, 2000);
+});
+
+window.addEventListener("resize", sendHeight);
+
+const resizeObserver = new ResizeObserver(sendHeight);
+resizeObserver.observe(document.body);
+
+function switchPewView(view) {
+  const chartView = document.getElementById('pew-chart-view');
+  const dataView = document.getElementById('pew-data-view');
+  const btnChart = document.getElementById('btn-chart');
+  const btnData = document.getElementById('btn-data');
+
+  if (view === 'data') {
+    chartView.style.display = 'none';
+    dataView.style.display = 'block';
+    btnData.classList.add('active');
+    btnChart.classList.remove('active');
+  } else {
+    chartView.style.display = 'block';
+    dataView.style.display = 'none';
+    btnChart.classList.add('active');
+    btnData.classList.remove('active');
+  }
+
+  setTimeout(sendHeight, 50);
+}
+</script>
+
 </body>
 </html>
