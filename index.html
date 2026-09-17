@@ -264,6 +264,19 @@ function switchPewView(view) {
 
   setTimeout(sendHeight, 50);
 }
+       document.addEventListener("DOMContentLoaded", function () {
+  const text = document.body.innerText.trim();
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+
+  window.parent.postMessage(
+    {
+      type: "reading-time",
+      minutes: minutes
+    },
+    "https://iiacss.org"
+  );
+});
 </script>
 
 </body>
